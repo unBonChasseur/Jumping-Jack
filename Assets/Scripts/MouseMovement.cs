@@ -13,9 +13,12 @@ public class MouseMovement : MonoBehaviour
     void Start()
     {
         // We lock the cursor on the screen.
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
+    /// <summary>
+    /// Allows player to rotate the camera with his mouse
+    /// </summary>
     void Update()
     {
         //If we move mouse on X axis, the character turn on X axis

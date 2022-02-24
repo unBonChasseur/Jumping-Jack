@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AnimationStateController : MonoBehaviour
 {
-    
     //Hashes useful for animations
     [Header("Animations")]
     private Animator m_animator;
@@ -27,6 +26,8 @@ public class AnimationStateController : MonoBehaviour
     private Transform m_groundCheck;
     [SerializeField]
     private LayerMask m_groundMask;
+    [SerializeField]
+    private LayerMask m_groundVictoryMask;
     [SerializeField]
     private Vector3 m_velocity;
 
@@ -60,6 +61,13 @@ public class AnimationStateController : MonoBehaviour
 
     void Update()
     {
+        // Check if the player is on the ground
+        if(Physics.CheckSphere(m_groundCheck.position, m_groundDistance, m_groundVictoryMask))
+        {
+            GameManager.current.SetVictory(true);
+            GameManager.current.SetFinished(1);
+        }
+
         // Get Axis inputs
         float IsPressedZ = Input.GetAxis("Vertical");
         float IsPressedX = Input.GetAxis("Horizontal");

@@ -35,25 +35,32 @@ public class EnemyScript : MonoBehaviour
     Vector3 walkPoint;
     public float walkPointRange;
 
-    // Start is called before the first frame update
     void Start()
     {
         m_agent = GetComponent<NavMeshAgent>();
         m_transformPlayer = m_playerRef.transform;
         walkPoint = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
+        // starts the path searching
         StartCoroutine(SearchingCoroutine());
     }
 
+    /// <summary>
+    /// Function which launch every 0.1 sec the "SearchingFOV" function
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator SearchingCoroutine()
     {
-        // We check the FOV each 0.2 sec
-        yield return new WaitForSeconds(0.2f);
+        // We check the FOV each 0.1 sec
+        yield return new WaitForSeconds(0.1f);
         SearchingInFOV();
 
         StartCoroutine(SearchingCoroutine());
     }
 
+    /// <summary>
+    /// Search for the player in the FOV : if he is in, it will chase it, if not he will call the searchWalkPoint function
+    /// </summary>
     private void SearchingInFOV()
     {
         // Get all the elements with the player mask around the enemy
@@ -98,10 +105,17 @@ public class EnemyScript : MonoBehaviour
             // Get the direction and distance to the player
             Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
             float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-            
+
             // Check if there is a wall between the enemy and the player
             if (!Physics.Raycast(transform.position, directionToPlayer, distanceToPlayer, m_wallMask))
             {
+                // If the player is too near, he lose
+                if (distanceToPlayer < 0.3f)
+                {
+                    GameManager.current.SetVictory(false);
+                    GameManager.current.SetFinished(1);
+                }
+
                 // See the player then follow it
                 m_canShortSeePlayer = true;
                 m_agent.SetDestination(m_transformPlayer.position);
@@ -119,6 +133,9 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Make the enemy travel randomly in the building's area 
+    /// </summary>
     private void SearchWalkPoint()
     {
         // check if the walkpoint is far or not
@@ -130,7 +147,7 @@ public class EnemyScript : MonoBehaviour
             float randomX = Random.Range(-walkPointRange, walkPointRange);
             
             // If the enemy can reach the walkpoint
-            if(transform.position.x + randomX > 0.5 && transform.position.x + randomX < 11.5 && transform.position.z + randomZ > 2 && transform.position.z + randomZ < 29)
+            if(transform.position.x + randomX > 0.5 && transform.position.x + randomX < 11.5 && transform.position.z + randomZ > 2 && transform.position.z + randomZ < 37)
             {
                 walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
                 m_agent.SetDestination(walkPoint);
