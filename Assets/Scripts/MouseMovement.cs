@@ -24,6 +24,7 @@ public class MouseMovement : MonoBehaviour
 
         //If we move mouse on X axis, the character turn on Y axis
         float mouseY = Input.GetAxis("Mouse Y") * m_mouseSensitivity * Time.deltaTime;
+
         m_xRotation -= mouseY;
         // Reminder : Clamp to stop rotation between two values
         m_xRotation = Mathf.Clamp(m_xRotation, -90f, 90f);

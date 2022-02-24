@@ -5,6 +5,7 @@ using UnityEngine;
 public class AnimationStateController : MonoBehaviour
 {
     
+    //Hashes useful for animations
     [Header("Animations")]
     private Animator m_animator;
     private int m_velocityZHash;
@@ -40,10 +41,6 @@ public class AnimationStateController : MonoBehaviour
     [SerializeField]
     private bool m_hasStarted = false;
 
-    [Header("Lava")]
-    [SerializeField]
-    private LayerMask m_lavaMask;
-
     void Start()
     {
         // Get animator
@@ -57,7 +54,8 @@ public class AnimationStateController : MonoBehaviour
         m_jumpSlowHash = Animator.StringToHash("IsJumpingSlow");
         m_jumpFastHash = Animator.StringToHash("IsJumpingFast");
 
-        StartCoroutine(StartAnimation());
+        //StartCoroutine(IntroductionAnimation());
+        m_hasStarted = true;
     }
 
     void Update()
@@ -184,7 +182,7 @@ public class AnimationStateController : MonoBehaviour
     /// Block player's input to let the animation's introduction play
     /// </summary>
     /// <returns></returns>
-    private IEnumerator StartAnimation()
+    private IEnumerator IntoductionAnimation()
     {
         // Speed at start of 1st animation
         m_velocityZ = 1.2f; 
